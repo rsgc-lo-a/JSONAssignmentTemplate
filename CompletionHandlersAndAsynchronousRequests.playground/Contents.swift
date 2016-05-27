@@ -7,6 +7,18 @@ class ViewController : UIViewController {
     
     // Views that need to be accessible to all methods
     let jsonResult = UILabel()
+    var pokemon = UILabel ()
+    var pokemonWeight = UILabel()
+    var pokemonType = UILabel()
+    var pokemonHeight = UILabel()
+    //let pokemonPick = UITextField()
+    
+    var currentPokemon = "383"
+    var height = ""
+    var name = ""
+    var type = ""
+    var weight = ""
+
     
     // If data is successfully retrieved from the server, we can parse it here
     func parseMyJSON(theData : NSData) {
@@ -23,7 +35,7 @@ class ViewController : UIViewController {
             // Source JSON is here:
             // http://www.learnswiftonline.com/Samples/subway.json
             //
-            let json = try NSJSONSerialization.JSONObjectWithData(theData, options: NSJSONReadingOptions.AllowFragments) as! AnyObject
+            let json = try NSJSONSerialization.JSONObjectWithData(theData, options: NSJSONReadingOptions.AllowFragments)
             
             // Print retrieved JSON
             print("")
@@ -34,10 +46,24 @@ class ViewController : UIViewController {
             print("")
             print("Now, add your parsing code here...")
             
+                        let types = json["types"]
+            
+            print(types)
+            let typeDict = types!![0]
+            
+            type = (typeDict["type"]!!["name"]
+            )
+            name = (json["name"])
+            height = (json["height"])
+            weight = (json["weight"])
+
             // Now we can update the UI
             // (must be done asynchronously)
             dispatch_async(dispatch_get_main_queue()) {
-                self.jsonResult.text = "parsed JSON should go here"
+                self.pokemon.text = name
+                self.pokemonHeight.text = "Height: " + height
+                self.pokemonWeight.text = "Weight: " + weight
+                self.pokemonType.text = "Type: " + type
             }
             
         } catch let error as NSError {
@@ -49,7 +75,11 @@ class ViewController : UIViewController {
     
     // Set up and begin an asynchronous request for JSON data
     func getMyJSON() {
-
+        
+        //if let pickText = Int(pokemonPick.text) {
+        
+        //currentPokemon = pokemonPick.text as String
+            
         // Define a completion handler
         // The completion handler is what gets called when this **asynchronous** network request is completed.
         // This is where we'd process the JSON retrieved
@@ -73,7 +103,7 @@ class ViewController : UIViewController {
                     // Show debug information (if a request was completed successfully)            
                     print("")
                     print("====== data from the request follows ======")
-                    print(data)
+                    //print(data)
                     print("")
                     print("====== response codes from the request follows ======")
                     print(response)
@@ -95,7 +125,7 @@ class ViewController : UIViewController {
         }
         
         // Define a URL to retrieve a JSON file from
-        let address : String = "http://www.learnswiftonline.com/Samples/subway.json"
+        let address : String = "http://pokeapi.co/api/v2/pokemon/" + currentPokemon + "/"
         
         // Try to make a URL request object
         if let url = NSURL(string: address) {
@@ -125,6 +155,7 @@ class ViewController : UIViewController {
         
     }
     
+    
     // This is the method that will run as soon as the view controller is created
     override func viewDidLoad() {
         
@@ -133,13 +164,50 @@ class ViewController : UIViewController {
         super.viewDidLoad()
 
         // Make the view's background be gray
-        view.backgroundColor = UIColor.lightGrayColor()
+        view.backgroundColor = UIColor.redColor()
 
         /*
          * Further define label that will show JSON data
          */
         
         // Set the label text and appearance
+        pokemon.text = "Pokemon"
+        pokemon.font = UIFont.systemFontOfSize(36)
+        
+        pokemon.translatesAutoresizingMaskIntoConstraints = false
+        pokemon.textAlignment = NSTextAlignment.Center
+        pokemon.textColor = UIColor.whiteColor()
+        view.addSubview(pokemon)
+        pokemonWeight.text = "Weight"
+        pokemonWeight.font = UIFont.systemFontOfSize(24)
+        
+        pokemonWeight.translatesAutoresizingMaskIntoConstraints = false
+        pokemonWeight.textAlignment = NSTextAlignment.Center
+        pokemonWeight.textColor = UIColor.whiteColor()
+        view.addSubview(pokemonWeight)
+        
+        pokemonHeight.text = "Height"
+        pokemonHeight.font = UIFont.systemFontOfSize(24)
+        pokemonHeight.translatesAutoresizingMaskIntoConstraints = false
+        pokemonHeight.textAlignment = NSTextAlignment.Center
+        pokemonHeight.textColor = UIColor.whiteColor()
+        view.addSubview(pokemonHeight)
+        
+        pokemonType.text = "Type"
+        pokemonType.font = UIFont.systemFontOfSize(24)
+        view.addSubview(pokemonType)
+        pokemonType.translatesAutoresizingMaskIntoConstraints = false
+        pokemonType.textAlignment = NSTextAlignment.Center
+        pokemonType.textColor = UIColor.whiteColor()
+        
+        /*pokemonPick.placeholder = "Pokemon ID"
+        pokemonPick.font = UIFont.systemFontOfSize(24)
+        view.addSubview(pokemonType)
+        pokemonPick.translatesAutoresizingMaskIntoConstraints = false
+        pokemonPick.textAlignment = NSTextAlignment.Center
+        
+        view.addSubview(pokemonPick)*/
+        
         jsonResult.text = "..."
         jsonResult.font = UIFont.systemFontOfSize(12)
         jsonResult.numberOfLines = 0   // makes number of lines dynamic
@@ -182,11 +250,16 @@ class ViewController : UIViewController {
         // Create a dictionary of views that will be used in the layout constraints defined below
         let viewsDictionary : [String : AnyObject] = [
             "title": jsonResult,
-            "getData": getData]
+            "getData": getData,
+            "Height" : pokemonHeight,
+            "Weight" : pokemonWeight,
+            "Type"   : pokemonType
+            //"Pick"   : pokemonPick
+        ]
         
         // Define the vertical constraints
         let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
-            "V:|-50-[getData]-[title]",
+            "V:|-50-[getData]-[title]-[Height]-[Weight]-[Type]",
             options: [],
             metrics: nil,
             views: viewsDictionary)
@@ -196,6 +269,8 @@ class ViewController : UIViewController {
         
         // Activate all defined constraints
         NSLayoutConstraint.activateConstraints(allConstraints)
+        
+        print("Good to go")
         
     }
     
