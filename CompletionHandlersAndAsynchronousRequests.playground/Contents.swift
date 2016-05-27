@@ -244,6 +244,8 @@ class ViewController : UIViewController {
         pokemon.textColor = UIColor.whiteColor()
         view.addSubview(pokemon)
         
+        pokemon.textAlignment = .Center
+        
         
         pokemonWeight.text = "Weight"
         pokemonWeight.font = UIFont.systemFontOfSize(24)
@@ -252,12 +254,16 @@ class ViewController : UIViewController {
         pokemonWeight.textColor = UIColor.whiteColor()
         view.addSubview(pokemonWeight)
         
+        pokemonWeight.textAlignment = .Center
+        
         pokemonWeightValue.text = "..."
         pokemonWeightValue.font = UIFont.systemFontOfSize(16)
         pokemonWeightValue.translatesAutoresizingMaskIntoConstraints = false
         pokemonWeightValue.textAlignment = NSTextAlignment.Center
         pokemonWeightValue.textColor = UIColor.whiteColor()
         view.addSubview(pokemonWeightValue)
+        
+        pokemonWeightValue.textAlignment = .Center
         
         pokemonHeight.text = "Height"
         pokemonHeight.font = UIFont.systemFontOfSize(24)
@@ -266,12 +272,16 @@ class ViewController : UIViewController {
         pokemonHeight.textColor = UIColor.whiteColor()
         view.addSubview(pokemonHeight)
         
+        pokemonHeight.textAlignment = .Center
+        
         pokemonHeightValue.text = "..."
         pokemonHeightValue.font = UIFont.systemFontOfSize(16)
         pokemonHeightValue.translatesAutoresizingMaskIntoConstraints = false
         pokemonHeightValue.textAlignment = NSTextAlignment.Center
         pokemonHeightValue.textColor = UIColor.whiteColor()
         view.addSubview(pokemonHeightValue)
+        
+        pokemonHeightValue.textAlignment = .Center
         
         pokemonType.text = "Type"
         pokemonType.font = UIFont.systemFontOfSize(24)
@@ -280,12 +290,17 @@ class ViewController : UIViewController {
         pokemonType.textAlignment = NSTextAlignment.Center
         pokemonType.textColor = UIColor.whiteColor()
         
+        pokemonType.textAlignment = .Center
+        
         pokemonTypeValue.text = "..."
         pokemonTypeValue.font = UIFont.systemFontOfSize(16)
         view.addSubview(pokemonTypeValue)
         pokemonTypeValue.translatesAutoresizingMaskIntoConstraints = false
         pokemonTypeValue.textAlignment = NSTextAlignment.Center
         pokemonTypeValue.textColor = UIColor.whiteColor()
+        
+        pokemonTypeValue.textAlignment = .Center
+
         
         /*pokemonPick.placeholder = "Pokemon ID"
         pokemonPick.font = UIFont.systemFontOfSize(24)
@@ -353,6 +368,13 @@ class ViewController : UIViewController {
             options: [],
             metrics: nil,
             views: viewsDictionary)
+        
+        let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
+            "H:|[title][getData][Height][HeightValue][Weight][WeightValue][Type][TypeValue]",
+            options: [],
+            metrics: nil,
+            views: viewsDictionary)
+        allConstraints += horizontalConstraints
         
         // Add the vertical constraints to the list of constraints
         allConstraints += verticalConstraints
