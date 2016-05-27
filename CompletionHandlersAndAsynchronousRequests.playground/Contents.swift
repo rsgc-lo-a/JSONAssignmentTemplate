@@ -9,8 +9,11 @@ class ViewController : UIViewController {
     let jsonResult = UILabel()
     var pokemon = UILabel ()
     var pokemonWeight = UILabel()
+    var pokemonWeightValue = UILabel()
     var pokemonType = UILabel()
+    var pokemonTypeValue = UILabel()
     var pokemonHeight = UILabel()
+    var pokemonHeightValue = UILabel()
     //let pokemonPick = UITextField()
     
     var currentPokemon = "383"
@@ -37,33 +40,95 @@ class ViewController : UIViewController {
             //
             let json = try NSJSONSerialization.JSONObjectWithData(theData, options: NSJSONReadingOptions.AllowFragments)
             
-            // Print retrieved JSON
-            print("")
-            print("====== the retrieved JSON is as follows ======")
-            print(json)
+            guard let characterDetails: [String: AnyObject] = json as? [String:AnyObject] else {
+                print ("coult not create dictionary")
+                return
+            }
             
-            // Now we can parse this...
-            print("")
-            print("Now, add your parsing code here...")
+            print("========")
+            print(characterDetails)
             
-                        let types = json["types"]
+            guard let characterName : String = characterDetails["name"] as? String else {
+                print("could not get the character name")
+                return
+            }
             
-            print(types)
-            let typeDict = types!![0]
+            print("========")
+            print(characterName)
             
-            type = (typeDict["type"]!!["name"]
-            )
-            name = (json["name"])
-            height = (json["height"])
-            weight = (json["weight"])
+            guard let characterHeight : Double = characterDetails["height"] as? Double else {
+                print("could not get the height name as String")
+                return
+            }
+            
+            print("========")
+            print(characterHeight)
+            
+            guard let characterHeightAsString : String = String(characterHeight) else {
+                print("could not get the heigh name as string")
+                return
+            }
 
+            print("========")
+            print(characterHeightAsString)
+            
+            guard let characterWeight : Double = characterDetails["weight"] as? Double else {
+                print("could not get the weight name")
+                return
+            }
+            
+            print("========")
+            print(characterWeight)
+
+            guard let characterWeightAsString : String = String(characterWeight) else {
+                print("could not get the weight name as string")
+                return
+                
+            }
+            
+            print("========")
+            print(characterWeightAsString)
+            
+            guard let characterTypes : [AnyObject] = characterDetails["types"] as? [AnyObject] else {
+                print("could not get the type")
+                return
+            }
+            
+            print("========")
+            print(characterTypes)
+            
+            guard let typeData : [ String : AnyObject ] = characterTypes[0] as? [ String : AnyObject ] else {
+                print("could not get the type data")
+                return
+            }
+
+            print("========")
+            print(typeData)
+            
+            guard let typeDetails : [ String : String ] = typeData["type"] as? [ String : String] else {
+                print("could not get the type details")
+                return
+            }
+            
+            print("========")
+            print(typeDetails)
+
+            guard let characterSlotType : String = typeDetails["name"]! as String else {
+                print ("could not get the type slot 1")
+                return
+            }
+            
+            print("========")
+            print(characterSlotType)
+
+            
             // Now we can update the UI
             // (must be done asynchronously)
             dispatch_async(dispatch_get_main_queue()) {
-                self.pokemon.text = name
-                self.pokemonHeight.text = "Height: " + height
-                self.pokemonWeight.text = "Weight: " + weight
-                self.pokemonType.text = "Type: " + type
+                //self.pokemon.text = name
+                self.pokemonHeightValue.text = characterHeightAsString
+                self.pokemonWeightValue.text = characterWeightAsString
+                self.pokemonTypeValue.text = characterSlotType
             }
             
         } catch let error as NSError {
@@ -178,13 +243,21 @@ class ViewController : UIViewController {
         pokemon.textAlignment = NSTextAlignment.Center
         pokemon.textColor = UIColor.whiteColor()
         view.addSubview(pokemon)
+        
+        
         pokemonWeight.text = "Weight"
         pokemonWeight.font = UIFont.systemFontOfSize(24)
-        
         pokemonWeight.translatesAutoresizingMaskIntoConstraints = false
         pokemonWeight.textAlignment = NSTextAlignment.Center
         pokemonWeight.textColor = UIColor.whiteColor()
         view.addSubview(pokemonWeight)
+        
+        pokemonWeightValue.text = "..."
+        pokemonWeightValue.font = UIFont.systemFontOfSize(16)
+        pokemonWeightValue.translatesAutoresizingMaskIntoConstraints = false
+        pokemonWeightValue.textAlignment = NSTextAlignment.Center
+        pokemonWeightValue.textColor = UIColor.whiteColor()
+        view.addSubview(pokemonWeightValue)
         
         pokemonHeight.text = "Height"
         pokemonHeight.font = UIFont.systemFontOfSize(24)
@@ -193,12 +266,26 @@ class ViewController : UIViewController {
         pokemonHeight.textColor = UIColor.whiteColor()
         view.addSubview(pokemonHeight)
         
+        pokemonHeightValue.text = "..."
+        pokemonHeightValue.font = UIFont.systemFontOfSize(16)
+        pokemonHeightValue.translatesAutoresizingMaskIntoConstraints = false
+        pokemonHeightValue.textAlignment = NSTextAlignment.Center
+        pokemonHeightValue.textColor = UIColor.whiteColor()
+        view.addSubview(pokemonHeightValue)
+        
         pokemonType.text = "Type"
         pokemonType.font = UIFont.systemFontOfSize(24)
         view.addSubview(pokemonType)
         pokemonType.translatesAutoresizingMaskIntoConstraints = false
         pokemonType.textAlignment = NSTextAlignment.Center
         pokemonType.textColor = UIColor.whiteColor()
+        
+        pokemonTypeValue.text = "..."
+        pokemonTypeValue.font = UIFont.systemFontOfSize(16)
+        view.addSubview(pokemonTypeValue)
+        pokemonTypeValue.translatesAutoresizingMaskIntoConstraints = false
+        pokemonTypeValue.textAlignment = NSTextAlignment.Center
+        pokemonTypeValue.textColor = UIColor.whiteColor()
         
         /*pokemonPick.placeholder = "Pokemon ID"
         pokemonPick.font = UIFont.systemFontOfSize(24)
@@ -229,7 +316,7 @@ class ViewController : UIViewController {
         getData.addTarget(self, action: #selector(ViewController.getMyJSON), forControlEvents: UIControlEvents.TouchUpInside)
         
         // Set the button's title
-        getData.setTitle("Get my JSON!", forState: UIControlState.Normal)
+        getData.setTitle("Find My Pokemon", forState: UIControlState.Normal)
         
         // Required to auto layout this button
         getData.translatesAutoresizingMaskIntoConstraints = false
@@ -253,13 +340,16 @@ class ViewController : UIViewController {
             "getData": getData,
             "Height" : pokemonHeight,
             "Weight" : pokemonWeight,
-            "Type"   : pokemonType
+            "Type"   : pokemonType,
+            "HeightValue" : pokemonHeightValue,
+            "WeightValue" : pokemonWeightValue,
+            "TypeValue" : pokemonTypeValue
             //"Pick"   : pokemonPick
         ]
         
         // Define the vertical constraints
         let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
-            "V:|-50-[getData]-[title]-[Height]-[Weight]-[Type]",
+            "V:|-50-[title]-[getData]-[Height]-[HeightValue]-[Weight]-[WeightValue]-[Type]-[TypeValue]",
             options: [],
             metrics: nil,
             views: viewsDictionary)
