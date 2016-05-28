@@ -14,13 +14,14 @@ class ViewController : UIViewController {
     var pokemonTypeValue = UILabel()
     var pokemonHeight = UILabel()
     var pokemonHeightValue = UILabel()
-    //let pokemonPick = UITextField()
+    //let pokemonPick = UITextField(frame: CGRect(x: 0, y: 300, width: 300, height: 30))
     
     var currentPokemon = "383"
     var height = ""
     var name = ""
     var type = ""
     var weight = ""
+    
 
     
     // If data is successfully retrieved from the server, we can parse it here
@@ -302,13 +303,12 @@ class ViewController : UIViewController {
         pokemonTypeValue.textAlignment = .Center
 
         
-        /*pokemonPick.placeholder = "Pokemon ID"
-        pokemonPick.font = UIFont.systemFontOfSize(24)
-        view.addSubview(pokemonType)
-        pokemonPick.translatesAutoresizingMaskIntoConstraints = false
-        pokemonPick.textAlignment = NSTextAlignment.Center
-        
-        view.addSubview(pokemonPick)*/
+//        pokemonPick.placeholder = "Pokemon ID"
+//        pokemonPick.font = UIFont.systemFontOfSize(24)
+//        view.addSubview(pokemonType)
+//        pokemonPick.translatesAutoresizingMaskIntoConstraints = false
+//        pokemonPick.textAlignment = NSTextAlignment.Center
+//        view.addSubview(pokemonPick)
         
         jsonResult.text = "..."
         jsonResult.font = UIFont.systemFontOfSize(12)
@@ -369,12 +369,12 @@ class ViewController : UIViewController {
             metrics: nil,
             views: viewsDictionary)
         
-        let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
-            "H:|[title][getData][Height][HeightValue][Weight][WeightValue][Type][TypeValue]",
-            options: [],
-            metrics: nil,
-            views: viewsDictionary)
-        allConstraints += horizontalConstraints
+//        let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
+//            "H:|[title][getData][Height][HeightValue][Weight][WeightValue][Type][TypeValue]",
+//            options: [],
+//            metrics: nil,
+//            views: viewsDictionary)
+//        allConstraints += horizontalConstraints
         
         // Add the vertical constraints to the list of constraints
         allConstraints += verticalConstraints
